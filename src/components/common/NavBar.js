@@ -1,23 +1,24 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { Layout, Menu } from "antd";
-import { UserContext } from "../../App";
-const { Header } = Layout;
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { Layout, Menu } from 'antd'
+import { UserContext } from '../../App'
+const { Header } = Layout
 
 function NavBar() {
-  const { user, setUser, firebaseAuth } = useContext(UserContext);
+  const { user, setUser, firebaseAuth } = useContext(UserContext)
   function signOut() {
-    //   firebaseAuth.signOut()
-    //     .then(() => {
-    setUser(null);
-    localStorage.setItem("user", null);
-    // })
-    // .catch((error) => console.log(error))
+    firebaseAuth
+      .signOut()
+      .then(() => {
+        setUser(null)
+        localStorage.setItem('user', null)
+      })
+      .catch((error) => console.log(error))
   }
   return (
     <Header>
       <div className="logo" />
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
         <Menu.Item key="1">
           <Link to="/">Home</Link>
         </Menu.Item>
@@ -37,7 +38,7 @@ function NavBar() {
         )}
       </Menu>
     </Header>
-  );
+  )
 }
 
-export default NavBar;
+export default NavBar

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory } from 'react-router-dom'
 import { Form, Input, Button, Checkbox, Typography } from 'antd'
 import { UserContext } from '../App'
 
@@ -23,13 +23,15 @@ const Signup = () => {
   const { setUser, firebaseAuth } = useContext(UserContext)
   let history = useHistory()
   const onFinish = ({ email, password }) => {
-    // firebaseAuth.createUserWithEmailAndPassword(email, password)
-    //   .then(res => {
+    firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => {
         setError(null)
-        // setUser(res.user)
-        history.push("/")
-      // })
-      // .catch(err => setError(err.message))
+        setUser(res.user)
+        localStorage.setItem('user', JSON.stringify(res.user))
+        history.push('/')
+      })
+      .catch((err) => setError(err.message))
   }
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo)
@@ -73,11 +75,12 @@ const Signup = () => {
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
       <Form.Item {...tailLayout}>
-        {error && 
+        {error && (
           <>
             <Typography.Text type="danger">{error}</Typography.Text>
             <br />
-          </>}
+          </>
+        )}
         <Button type="primary" htmlType="submit">
           Sign Up
         </Button>

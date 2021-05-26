@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory } from 'react-router-dom'
 import firebase from 'firebase'
 import { Form, Input, Button, Checkbox, Typography } from 'antd'
 import { GoogleOutlined } from '@ant-design/icons'
@@ -27,33 +27,40 @@ const Login = () => {
   let history = useHistory()
   const onFinish = ({ email, password }) => {
     setLoading(true)
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //   .then(res => {
-    //     setError(null)
-    //     setUser(res.user)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((res) => {
+        setError(null)
+        setUser(res.user)
+        localStorage.setItem('user', JSON.stringify(res.user))
         setLoading(false)
-        history.push("/")
-      // })
-      // .catch(err => {
-      //   setLoading(false)
-      //   setError(err.message)
-      // })
+        history.push('/')
+      })
+      .catch((err) => {
+        setLoading(false)
+        setError(err.message)
+      })
   }
   const loginWithGoogle = () => {
     setLoading(true)
     const provider = new firebase.auth.GoogleAuthProvider()
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(() => {
-        firebase.auth().signInWithPopup(provider)
-          .then(res => {
+        firebase
+          .auth()
+          .signInWithPopup(provider)
+          .then((res) => {
             setError(null)
             setUser(res.user)
             setLoading(false)
             localStorage.setItem('user', JSON.stringify(res.user))
-            history.push("/")
+            history.push('/')
           })
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false)
         setError(err.message)
       })
@@ -101,17 +108,19 @@ const Login = () => {
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
       <Form.Item {...tailLayout}>
-        {error && 
+        {error && (
           <React.Fragment>
             <Typography.Text type="danger">{error}</Typography.Text>
             <br />
-          </React.Fragment>}
+          </React.Fragment>
+        )}
         <Button type="primary" loading={loading} htmlType="submit">
           Login
         </Button>
       </Form.Item>
       <Form.Item {...tailLayout}>
-        <Button ghost
+        <Button
+          ghost
           type="primary"
           icon={<GoogleOutlined />}
           loading={loading}
